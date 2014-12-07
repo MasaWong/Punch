@@ -1,0 +1,8 @@
+/.idea
+/.gradle
+/build
+/key
+.DS_Store
+Punch.iml
+*gradle*
+local.properties
