@@ -2,6 +2,8 @@
 <resources>
 
     <string name="app_name">Punch</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="main_today">今天：</string>
+    <string name="main_month">本月：</string>
 
 </resources>

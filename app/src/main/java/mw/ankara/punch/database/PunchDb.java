@@ -4,7 +4,10 @@ import android.content.Context;
 import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.util.ArrayList;
+
 import mw.ankara.base.database.DbHelper;
+import mw.ankara.base.database.SQLitable;
 
 /**
  * @author MasaWong
@@ -46,6 +49,5 @@ public class PunchDb extends DbHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
     }
 }
