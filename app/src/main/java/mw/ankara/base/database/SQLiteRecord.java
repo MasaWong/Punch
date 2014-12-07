@@ -24,12 +24,12 @@ public class SQLiteRecord implements SQLitable {
         Field[] fields = getClass().getDeclaredFields();
         try {
             for (Field field : fields) {
-                MapKey mapKey = field.getAnnotation(MapKey.class);
+                SQLField annotation = field.getAnnotation(SQLField.class);
 
-                if (mapKey != null) {
+                if (annotation != null) {
                     field.setAccessible(true);
 
-                    int index = cursor.getColumnIndex(mapKey.key());
+                    int index = cursor.getColumnIndex(annotation.key());
                     Class<?> fieldClass = field.getType();
                     // 只转换几种常见类型
                     if (fieldClass == int.class) {
@@ -66,25 +66,25 @@ public class SQLiteRecord implements SQLitable {
 
             Field[] fields = getClass().getDeclaredFields();
             for (Field field : fields) {
-                MapKey mapKey = field.getAnnotation(MapKey.class);
+                SQLField annotation = field.getAnnotation(SQLField.class);
 
-                if (mapKey != null) {
+                if (annotation != null) {
                     field.setAccessible(true);
                     Object value = field.get(this);
 
                     // 只转换几种常见类型
                     if (value instanceof Integer) {
-                        pairs.put(mapKey.key(), (Integer) value);
+                        pairs.put(annotation.key(), (Integer) value);
                     } else if (value instanceof Double) {
-                        pairs.put(mapKey.key(), (Double) value);
+                        pairs.put(annotation.key(), (Double) value);
                     } else if (value instanceof Long) {
-                        pairs.put(mapKey.key(), (Long) value);
+                        pairs.put(annotation.key(), (Long) value);
                     } else if (value instanceof Float) {
-                        pairs.put(mapKey.key(), (Float) value);
+                        pairs.put(annotation.key(), (Float) value);
                     } else if (value instanceof Short) {
-                        pairs.put(mapKey.key(), (Short) value);
+                        pairs.put(annotation.key(), (Short) value);
                     } else if (value instanceof String) {
-                        pairs.put(mapKey.key(), (String) value);
+                        pairs.put(annotation.key(), (String) value);
                     }
 
                     field.setAccessible(false);
@@ -111,9 +111,9 @@ public class SQLiteRecord implements SQLitable {
 
             Field[] fields = getClass().getDeclaredFields();
             for (Field field : fields) {
-                MapKey mapKey = field.getAnnotation(MapKey.class);
+                SQLField annotation = field.getAnnotation(SQLField.class);
 
-                if (mapKey != null) {
+                if (annotation != null) {
                     Class<?> fieldClass = field.getType();
 
                     // 只转换几种常见类型
@@ -131,11 +131,11 @@ public class SQLiteRecord implements SQLitable {
                     }
 
                     String primary = "";
-                    if (checkPrimary(mapKey, foundPrimary)) {
+                    if (checkPrimary(annotation, foundPrimary)) {
                         foundPrimary = true;
                         primary = " primary key ";
                     }
-                    creation += mapKey.key() + type + primary + ",";
+                    creation += annotation.key() + type + primary + ",";
                 }
             }
             creation = creation.substring(0, creation.length() - 1) + ")";
@@ -154,7 +154,7 @@ public class SQLiteRecord implements SQLitable {
      * @return 该字段是否是主键
      * @throws Exception 如果多于一个主键，则抛错
      */
-    protected boolean checkPrimary(MapKey mapKey, boolean foundPrimary) throws Exception {
+    protected boolean checkPrimary(SQLField mapKey, boolean foundPrimary) throws Exception {
         if (!mapKey.primary()) {
             return false;
         } else if (foundPrimary) {

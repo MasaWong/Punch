@@ -17,7 +17,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Inherited
-public @interface MapKey {
+public @interface SQLField {
     public String key() default "";
 
     public boolean primary() default false;

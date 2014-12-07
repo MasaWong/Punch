@@ -1,6 +1,6 @@
 package mw.ankara.punch.database;
 
-import mw.ankara.base.database.MapKey;
+import mw.ankara.base.database.SQLField;
 import mw.ankara.base.database.SQLiteRecord;
 
 /**
@@ -9,18 +9,19 @@ import mw.ankara.base.database.SQLiteRecord;
  */
 public class PunchRecord extends SQLiteRecord {
 
-    private static final int HALF_AN_HOUR = 1800000;
+    private static final long A_QUARTER = 900000l;
+    private static final int AN_HOUR = 3600000;
 
-    @MapKey(key = "date", primary = true)
+    @SQLField(key = "date", primary = true)
     public String date;
 
-    @MapKey(key = "start_time")
+    @SQLField(key = "start_time")
     public long startTime;
 
-    @MapKey(key = "end_time")
+    @SQLField(key = "end_time")
     public long endTime;
 
-    @MapKey(key = "hours")
+    @SQLField(key = "hours")
     public int hours;
 
     public PunchRecord() {
@@ -36,7 +37,7 @@ public class PunchRecord extends SQLiteRecord {
             startTime = System.currentTimeMillis();
         } else {
             endTime = System.currentTimeMillis();
-            hours = (int) ((startTime - endTime) / HALF_AN_HOUR);
+            hours = (int) ((endTime - startTime + A_QUARTER) / AN_HOUR);
         }
     }
 }

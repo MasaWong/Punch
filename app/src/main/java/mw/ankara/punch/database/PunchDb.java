@@ -4,10 +4,7 @@ import android.content.Context;
 import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 
-import java.util.ArrayList;
-
 import mw.ankara.base.database.DbHelper;
-import mw.ankara.base.database.SQLitable;
 
 /**
  * @author MasaWong
