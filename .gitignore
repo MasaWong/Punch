@@ -3,6 +3,7 @@
 /build
 /key
 .DS_Store
-Punch.iml
+*.iml
 *gradle*
 local.properties
+proguard*
