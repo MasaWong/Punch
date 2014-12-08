@@ -14,18 +14,6 @@
         android:padding="@dimen/cell_horizontal">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/main_today"
-            android:textSize="18sp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/main_month"
-            android:textSize="18sp"/>
-
-        <TextView
             android:id="@+id/main_tv_month"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -62,11 +50,13 @@
                 android:onClick="onStartClick"
                 android:textSize="32sp"/>
 
-            <TextView
+            <Button
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="@android:color/transparent"
                 android:gravity="center"
+                android:onClick="onMonthClick"
                 android:text="@string/to"
                 android:textSize="24sp"/>
 

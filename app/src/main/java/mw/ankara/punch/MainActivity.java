@@ -8,6 +8,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -161,6 +162,14 @@ public class MainActivity extends ActionBarActivity {
         dialog.show();
     }
 
+    /**
+     * @param view 点击响应
+     */
+    public void onMonthClick(View view) {
+        int hours = PunchDb.getInstance().querySum(PunchRecord.class, "hours", null);
+        Toast.makeText(this, String.valueOf(hours), Toast.LENGTH_LONG).show();
+    }
+
     private void updateHours(PunchRecord record) {
         SimpleDateFormat format = new SimpleDateFormat("HH:mm");
 
@@ -177,9 +186,5 @@ public class MainActivity extends ActionBarActivity {
         } else {
             mBEnd.setText(null);
         }
-    }
-
-    private void updateMonth() {
-        int hours = PunchDb.getInstance().querySum(PunchRecord.class, "hours", null);
     }
 }
