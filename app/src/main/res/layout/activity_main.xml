@@ -10,7 +10,6 @@
         android:id="@+id/main_ll_drawer"
         android:layout_width="@dimen/drawer_width"
         android:layout_height="match_parent"
-        android:background="@android:color/holo_purple"
         android:orientation="vertical"
         android:padding="@dimen/cell_horizontal">
 
@@ -43,7 +42,7 @@
         <CalendarView
             android:id="@+id/main_cv_calendar"
             android:layout_width="match_parent"
-            android:layout_height="300dp"/>
+            android:layout_height="360dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -52,31 +51,62 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <TextView
+            <Button
                 android:id="@+id/main_tv_start"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:layout_weight="3"
+                android:background="@drawable/button_white"
                 android:gravity="center"
                 android:onClick="onStartClick"
                 android:textSize="32sp"/>
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0.5dp"
-                android:layout_weight="1"
-                android:background="@android:color/darker_gray"/>
-
             <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/to"
+                android:textSize="24sp"/>
+
+            <Button
                 android:id="@+id/main_tv_end"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:layout_weight="3"
+                android:background="@drawable/button_white"
                 android:gravity="center"
                 android:onClick="onEndClick"
                 android:textSize="32sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/main_b_copy"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_margin="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/button_white"
+                android:onClick="onCopyClick"
+                android:text="@string/copy"/>
+
+            <Button
+                android:id="@+id/main_b_paste"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_margin="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/button_white"
+                android:enabled="false"
+                android:onClick="onPasteClick"
+                android:text="@string/paste"/>
         </LinearLayout>
 
         <Button
@@ -84,6 +114,8 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_margin="8dp"
-            android:onClick="onPunchClick"/>
+            android:background="@drawable/button_white"
+            android:onClick="onPunchClick"
+            android:text="@string/app_name"/>
     </LinearLayout>
 </android.support.v4.widget.SlidingPaneLayout>

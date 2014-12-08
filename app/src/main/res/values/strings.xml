@@ -2,6 +2,9 @@
 <resources>
 
     <string name="app_name">Punch</string>
+    <string name="copy">Copy</string>
+    <string name="paste">Paste</string>
+    <string name="to">to</string>
 
     <string name="main_today">今天：</string>
     <string name="main_month">本月：</string>

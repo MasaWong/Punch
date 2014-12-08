@@ -5,8 +5,8 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.CalendarView;
-import android.widget.TextView;
 import android.widget.TimePicker;
 
 import java.text.SimpleDateFormat;
@@ -20,11 +20,13 @@ import mw.ankara.punch.database.PunchRecord;
 
 public class MainActivity extends ActionBarActivity {
 
-    private TextView mEtStart;
-    private TextView mEtEnd;
+    private Button mBPaste;
+    private Button mBStart;
+    private Button mBEnd;
 
     private PunchRecord mRecordToday;
     private PunchRecord mRecordSelected;
+    private PunchRecord mRecordCopied;
 
     private String mToday;
 
@@ -34,8 +36,9 @@ public class MainActivity extends ActionBarActivity {
         getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
 
-        mEtStart = (TextView) findViewById(R.id.main_tv_start);
-        mEtEnd = (TextView) findViewById(R.id.main_tv_end);
+        mBPaste = (Button) findViewById(R.id.main_b_paste);
+        mBStart = (Button) findViewById(R.id.main_tv_start);
+        mBEnd = (Button) findViewById(R.id.main_tv_end);
 
         CalendarView calendarView = (CalendarView) findViewById(R.id.main_cv_calendar);
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
@@ -59,12 +62,27 @@ public class MainActivity extends ActionBarActivity {
         setToday();
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if (mRecordSelected != null) {
+            mRecordSelected.updateOrInsert();
+        }
+    }
+
     private void setToday() {
         SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日");
         Date now = new Date(System.currentTimeMillis());
         mToday = format.format(now);
+
         mRecordToday = query(mToday);
+        mRecordSelected = mRecordToday;
         updateHours(mRecordToday);
+    }
+
+    private void delete(String date) {
+        PunchDb.getInstance().delete(PunchRecord.class, "date=?", new String[]{date});
     }
 
     private PunchRecord query(String date) {
@@ -85,6 +103,23 @@ public class MainActivity extends ActionBarActivity {
     }
 
     /**
+     * @param view {@link R.id#main_b_copy}的点击响应
+     */
+    public void onCopyClick(View view) {
+        mRecordCopied = mRecordSelected;
+        mBPaste.setEnabled(true);
+    }
+
+    /**
+     * @param view {@link R.id#main_b_paste}的点击响应
+     */
+    public void onPasteClick(View view) {
+        mRecordSelected.startTime = mRecordCopied.startTime;
+        mRecordSelected.endTime = mRecordCopied.endTime;
+        updateHours(mRecordSelected);
+    }
+
+    /**
      * @param view {@link R.id#main_tv_start}的点击响应
      */
     public void onStartClick(View view) {
@@ -97,7 +132,7 @@ public class MainActivity extends ActionBarActivity {
                 calendar.set(Calendar.MINUTE, minute);
                 mRecordSelected.startTime = calendar.getTimeInMillis();
 
-                mEtStart.setText(String.format("%02d:%02d", hourOfDay, minute));
+                mBStart.setText(String.format("%02d:%02d", hourOfDay, minute));
             }
         };
         TimePickerDialog dialog = new TimePickerDialog(this, listener,
@@ -118,7 +153,7 @@ public class MainActivity extends ActionBarActivity {
                 calendar.set(Calendar.MINUTE, minute);
                 mRecordSelected.endTime = calendar.getTimeInMillis();
 
-                mEtEnd.setText(String.format("%02d:%02d", hourOfDay, minute));
+                mBEnd.setText(String.format("%02d:%02d", hourOfDay, minute));
             }
         };
         TimePickerDialog dialog = new TimePickerDialog(this, listener,
@@ -131,16 +166,16 @@ public class MainActivity extends ActionBarActivity {
 
         if (record.startTime != 0) {
             Date startTime = new Date(record.startTime);
-            mEtStart.setText(format.format(startTime));
+            mBStart.setText(format.format(startTime));
         } else {
-            mEtStart.setText(null);
+            mBStart.setText(null);
         }
 
         if (record.endTime != 0) {
             Date endTime = new Date(record.endTime);
-            mEtEnd.setText(format.format(endTime));
+            mBEnd.setText(format.format(endTime));
         } else {
-            mEtEnd.setText(null);
+            mBEnd.setText(null);
         }
     }
 

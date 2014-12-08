@@ -24,8 +24,6 @@ public class PunchRecord extends SQLiteRecord {
     @Map(key = "hours")
     public int hours;
 
-    public boolean saved = true;
-
     public PunchRecord() {
     }
 
@@ -35,22 +33,18 @@ public class PunchRecord extends SQLiteRecord {
 
     public void punch() {
         if (startTime == 0) {
-            hours = 0;
             startTime = System.currentTimeMillis();
         } else {
             endTime = System.currentTimeMillis();
-            hours = (int) ((endTime - startTime + A_QUARTER) / AN_HOUR);
         }
-
-        saved = false;
     }
 
     public void updateOrInsert() {
+        hours = (int) ((endTime - startTime + A_QUARTER) / AN_HOUR);
+
         PunchDb database = PunchDb.getInstance();
         if (database.update(this, "date=?", new String[]{this.date}) == 0) {
             database.insert(this);
         }
-
-        saved = true;
     }
 }
