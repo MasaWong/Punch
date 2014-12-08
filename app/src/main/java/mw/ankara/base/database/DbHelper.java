@@ -151,6 +151,18 @@ public abstract class DbHelper extends SQLiteOpenHelper {
     }
 
     /**
+     * 删除操作
+     *
+     * @param clazz       需要删除数据的类型
+     * @param whereClause sql语句的where条件
+     * @param whereArgs   sql语句的where参数
+     * @return 被删除的行数
+     */
+    public int delete(Class<? extends SQLitable> clazz, String whereClause, String[] whereArgs) {
+        return getWritableDatabase().delete(clazz.getSimpleName(), whereClause, whereArgs);
+    }
+
+    /**
      * 表的创建工作
      *
      * @param database onCreate里的参数

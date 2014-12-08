@@ -1,14 +1,17 @@
 package mw.ankara.punch;
 
+import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.view.Window;
 import android.widget.CalendarView;
-import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.TimePicker;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import mw.ankara.base.database.SQLitable;
@@ -17,9 +20,8 @@ import mw.ankara.punch.database.PunchRecord;
 
 public class MainActivity extends ActionBarActivity {
 
-    private CalendarView mCvCalendar;
-    private EditText mEtStart;
-    private EditText mEtEnd;
+    private TextView mEtStart;
+    private TextView mEtEnd;
 
     private PunchRecord mRecordToday;
     private PunchRecord mRecordSelected;
@@ -32,11 +34,11 @@ public class MainActivity extends ActionBarActivity {
         getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
 
-        mCvCalendar = (CalendarView) findViewById(R.id.main_cv_calendar);
-        mEtStart = (EditText) findViewById(R.id.main_et_start);
-        mEtEnd = (EditText) findViewById(R.id.main_et_end);
+        mEtStart = (TextView) findViewById(R.id.main_tv_start);
+        mEtEnd = (TextView) findViewById(R.id.main_tv_end);
 
-        mCvCalendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+        CalendarView calendarView = (CalendarView) findViewById(R.id.main_cv_calendar);
+        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month,
                     int dayOfMonth) {
@@ -51,16 +53,6 @@ public class MainActivity extends ActionBarActivity {
                     mRecordSelected = query(selectDate);
                 }
                 updateHours(mRecordSelected);
-            }
-        });
-        findViewById(R.id.main_b_punch).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mRecordToday.punch();
-                mRecordToday.updateOrInsert();
-                if (mRecordToday == mRecordSelected) {
-                    updateHours(mRecordSelected);
-                }
             }
         });
 
@@ -81,8 +73,61 @@ public class MainActivity extends ActionBarActivity {
         return records.size() == 0 ? new PunchRecord(date) : (PunchRecord) records.get(0);
     }
 
+    /**
+     * @param view {@link R.id#main_b_punch}的点击响应
+     */
+    public void onPunchClick(View view) {
+        mRecordToday.punch();
+        mRecordToday.updateOrInsert();
+        if (mRecordToday == mRecordSelected) {
+            updateHours(mRecordSelected);
+        }
+    }
+
+    /**
+     * @param view {@link R.id#main_tv_start}的点击响应
+     */
+    public void onStartClick(View view) {
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(mRecordSelected.startTime);
+        TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                calendar.set(Calendar.MINUTE, minute);
+                mRecordSelected.startTime = calendar.getTimeInMillis();
+
+                mEtStart.setText(String.format("%02d:%02d", hourOfDay, minute));
+            }
+        };
+        TimePickerDialog dialog = new TimePickerDialog(this, listener,
+                calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
+        dialog.show();
+    }
+
+    /**
+     * @param view {@link R.id#main_tv_end}的点击响应
+     */
+    public void onEndClick(View view) {
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(mRecordSelected.endTime);
+        TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                calendar.set(Calendar.MINUTE, minute);
+                mRecordSelected.endTime = calendar.getTimeInMillis();
+
+                mEtEnd.setText(String.format("%02d:%02d", hourOfDay, minute));
+            }
+        };
+        TimePickerDialog dialog = new TimePickerDialog(this, listener,
+                calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
+        dialog.show();
+    }
+
     private void updateHours(PunchRecord record) {
-        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
 
         if (record.startTime != 0) {
             Date startTime = new Date(record.startTime);
