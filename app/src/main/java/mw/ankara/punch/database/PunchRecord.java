@@ -1,6 +1,6 @@
 package mw.ankara.punch.database;
 
-import mw.ankara.base.database.SQLField;
+import mw.ankara.base.database.Map;
 import mw.ankara.base.database.SQLiteRecord;
 
 /**
@@ -12,16 +12,16 @@ public class PunchRecord extends SQLiteRecord {
     private static final long A_QUARTER = 900000l;
     private static final int AN_HOUR = 3600000;
 
-    @SQLField(key = "date", primary = true)
+    @Map(key = "date", primary = true)
     public String date;
 
-    @SQLField(key = "start_time")
+    @Map(key = "start_time")
     public long startTime;
 
-    @SQLField(key = "end_time")
+    @Map(key = "end_time")
     public long endTime;
 
-    @SQLField(key = "hours")
+    @Map(key = "hours")
     public int hours;
 
     public boolean saved = true;

@@ -24,7 +24,7 @@ public class SQLiteRecord implements SQLitable {
         Field[] fields = getClass().getDeclaredFields();
         try {
             for (Field field : fields) {
-                SQLField annotation = field.getAnnotation(SQLField.class);
+                Map annotation = field.getAnnotation(Map.class);
 
                 if (annotation != null) {
                     field.setAccessible(true);
@@ -66,7 +66,7 @@ public class SQLiteRecord implements SQLitable {
 
             Field[] fields = getClass().getDeclaredFields();
             for (Field field : fields) {
-                SQLField annotation = field.getAnnotation(SQLField.class);
+                Map annotation = field.getAnnotation(Map.class);
 
                 if (annotation != null) {
                     field.setAccessible(true);
@@ -111,7 +111,7 @@ public class SQLiteRecord implements SQLitable {
 
             Field[] fields = getClass().getDeclaredFields();
             for (Field field : fields) {
-                SQLField annotation = field.getAnnotation(SQLField.class);
+                Map annotation = field.getAnnotation(Map.class);
 
                 if (annotation != null) {
                     Class<?> fieldClass = field.getType();
@@ -154,7 +154,7 @@ public class SQLiteRecord implements SQLitable {
      * @return 该字段是否是主键
      * @throws Exception 如果多于一个主键，则抛错
      */
-    protected boolean checkPrimary(SQLField mapKey, boolean foundPrimary) throws Exception {
+    protected boolean checkPrimary(Map mapKey, boolean foundPrimary) throws Exception {
         if (!mapKey.primary()) {
             return false;
         } else if (foundPrimary) {
