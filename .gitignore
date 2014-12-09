@@ -1,7 +1,7 @@
-/.idea
-/.gradle
-/build
-/key
+.idea
+.gradle
+build
+key
 .DS_Store
 *.iml
 *gradle*
