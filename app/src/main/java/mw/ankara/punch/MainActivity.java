@@ -21,6 +21,8 @@ import mw.ankara.punch.database.PunchRecord;
 
 public class MainActivity extends ActionBarActivity {
 
+    private static final long DAY_MILLIS = 24 * 60 * 60 * 1000l;
+
     private Button mBPaste;
     private Button mBStart;
     private Button mBEnd;
@@ -29,7 +31,7 @@ public class MainActivity extends ActionBarActivity {
     private PunchRecord mRecordSelected;
     private PunchRecord mRecordCopied;
 
-    private String mToday;
+    private Calendar mCalendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,12 +52,13 @@ public class MainActivity extends ActionBarActivity {
                     mRecordSelected.updateOrInsert();
                 }
 
-                String selectDate = String.format("%4d年%02d月%02d日", year, month + 1, dayOfMonth);
-                if (mToday.equals(selectDate)) {
+                mCalendar.set(year, month, dayOfMonth);
+                if (mCalendar.getTimeInMillis() == mRecordToday.baseTime) {
                     mRecordSelected = mRecordToday;
                 } else {
-                    mRecordSelected = query(selectDate);
+                    mRecordSelected = query(mCalendar.getTimeInMillis());
                 }
+
                 updateHours(mRecordSelected);
             }
         });
@@ -73,23 +76,25 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void setToday() {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日");
-        Date now = new Date(System.currentTimeMillis());
-        mToday = format.format(now);
+        mCalendar = Calendar.getInstance();
+        mCalendar.set(Calendar.HOUR_OF_DAY, 0);
+        mCalendar.set(Calendar.MINUTE, 0);
+        mCalendar.set(Calendar.SECOND, 0);
+        mCalendar.set(Calendar.MILLISECOND, 0);
 
-        mRecordToday = query(mToday);
+        mRecordToday = query(mCalendar.getTimeInMillis());
         mRecordSelected = mRecordToday;
         updateHours(mRecordToday);
     }
 
     private void delete(String date) {
-        PunchDb.getInstance().delete(PunchRecord.class, "date=?", new String[]{date});
+        PunchDb.getInstance().delete(PunchRecord.class, "time=?", new String[]{date});
     }
 
-    private PunchRecord query(String date) {
+    private PunchRecord query(long baseTime) {
         ArrayList<SQLitable> records = PunchDb.getInstance().query(PunchRecord.class,
-                "date=?", new String[]{date}, null, null, null);
-        return records.size() == 0 ? new PunchRecord(date) : (PunchRecord) records.get(0);
+                "base_time=?", new String[]{String.valueOf(baseTime)}, null, null, null);
+        return records.size() == 0 ? new PunchRecord(baseTime) : (PunchRecord) records.get(0);
     }
 
     /**
@@ -115,8 +120,8 @@ public class MainActivity extends ActionBarActivity {
      * @param view {@link R.id#main_b_paste}的点击响应
      */
     public void onPasteClick(View view) {
-        mRecordSelected.startTime = mRecordCopied.startTime;
-        mRecordSelected.endTime = mRecordCopied.endTime;
+        mRecordSelected.startTime = mRecordCopied.startTime % DAY_MILLIS + mRecordSelected.baseTime;
+        mRecordSelected.endTime = mRecordCopied.endTime % DAY_MILLIS + mRecordSelected.baseTime;
         updateHours(mRecordSelected);
     }
 
@@ -125,7 +130,13 @@ public class MainActivity extends ActionBarActivity {
      */
     public void onStartClick(View view) {
         final Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(mRecordSelected.startTime);
+
+        if (mRecordSelected.startTime == 0) {
+            calendar.setTimeInMillis(mCalendar.getTimeInMillis());
+        } else {
+            calendar.setTimeInMillis(mRecordSelected.startTime);
+        }
+
         TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -146,7 +157,13 @@ public class MainActivity extends ActionBarActivity {
      */
     public void onEndClick(View view) {
         final Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(mRecordSelected.endTime);
+
+        if (mRecordSelected.endTime == 0) {
+            calendar.setTimeInMillis(mCalendar.getTimeInMillis());
+        } else {
+            calendar.setTimeInMillis(mRecordSelected.endTime);
+        }
+
         TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {

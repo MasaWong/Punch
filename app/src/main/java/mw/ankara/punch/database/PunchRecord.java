@@ -12,8 +12,8 @@ public class PunchRecord extends SQLiteRecord {
     private static final long A_QUARTER = 900000l;
     private static final int AN_HOUR = 3600000;
 
-    @Map(key = "date", primary = true)
-    public String date;
+    @Map(key = "base_time", primary = true)
+    public long baseTime;
 
     @Map(key = "start_time")
     public long startTime;
@@ -27,8 +27,8 @@ public class PunchRecord extends SQLiteRecord {
     public PunchRecord() {
     }
 
-    public PunchRecord(String date) {
-        this.date = date;
+    public PunchRecord(long baseTime) {
+        this.baseTime = baseTime;
     }
 
     public void punch() {
@@ -40,10 +40,12 @@ public class PunchRecord extends SQLiteRecord {
     }
 
     public void updateOrInsert() {
-        hours = (int) ((endTime - startTime + A_QUARTER) / AN_HOUR);
+        if (endTime != 0) {
+            hours = (int) ((endTime - startTime + A_QUARTER) / AN_HOUR);
+        }
 
         PunchDb database = PunchDb.getInstance();
-        if (database.update(this, "date=?", new String[]{this.date}) == 0) {
+        if (database.update(this, "base_time=?", new String[]{String.valueOf(baseTime)}) == 0) {
             database.insert(this);
         }
     }
