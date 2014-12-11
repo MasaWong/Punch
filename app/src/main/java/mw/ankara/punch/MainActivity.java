@@ -1,6 +1,8 @@
 package mw.ankara.punch;
 
+import android.app.AlertDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
@@ -68,9 +70,7 @@ public class MainActivity extends ActionBarActivity {
     protected void onPause() {
         super.onPause();
 
-        if (mRecordSelected != null) {
-            mRecordSelected.updateOrInsert();
-        }
+        saveRecord();
     }
 
     private void setToday() {
@@ -95,14 +95,30 @@ public class MainActivity extends ActionBarActivity {
         return records.size() == 0 ? new PunchRecord(baseTime) : (PunchRecord) records.get(0);
     }
 
+    private void saveRecord() {
+        if (mRecordSelected != null) {
+            mRecordSelected.updateOrInsert();
+        }
+    }
+
     /**
      * @param view {@link R.id#main_b_punch}的点击响应
      */
     public void onPunchClick(View view) {
-        mRecordToday.punch();
-        mRecordToday.updateOrInsert();
         if (mRecordToday == mRecordSelected) {
+            mRecordToday.punch();
+            mRecordToday.updateOrInsert();
             updateHours(mRecordSelected);
+        } else {
+            new AlertDialog.Builder(this).setTitle(R.string.warning_modify)
+                    .setNegativeButton(R.string.no, null)
+                    .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            mRecordToday.punch();
+                            mRecordToday.updateOrInsert();
+                        }
+                    }).create().show();
         }
     }
 
@@ -185,6 +201,8 @@ public class MainActivity extends ActionBarActivity {
      * @param view 点击响应
      */
     public void onMonthClick(View view) {
+        saveRecord();
+
         int hours = PunchDb.getInstance().querySum(PunchRecord.class, "hours", null);
         Toast.makeText(this, String.valueOf(hours), Toast.LENGTH_LONG).show();
     }

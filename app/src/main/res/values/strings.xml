@@ -9,4 +9,9 @@
     <string name="main_today">今天：</string>
     <string name="main_month">本月：</string>
 
+    <string name="yes">是</string>
+    <string name="no">否</string>
+
+    <string name="warning_modify">是否修改今天的记录？</string>
+
 </resources>
