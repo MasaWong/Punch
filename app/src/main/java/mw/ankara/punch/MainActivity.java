@@ -21,8 +21,6 @@ import mw.ankara.punch.database.PunchRecord;
 
 public class MainActivity extends ActionBarActivity {
 
-    private static final long DAY_MILLIS = 24 * 60 * 60 * 1000l;
-
     private Button mBPaste;
     private Button mBStart;
     private Button mBEnd;
@@ -120,8 +118,12 @@ public class MainActivity extends ActionBarActivity {
      * @param view {@link R.id#main_b_paste}的点击响应
      */
     public void onPasteClick(View view) {
-        mRecordSelected.startTime = mRecordCopied.startTime % DAY_MILLIS + mRecordSelected.baseTime;
-        mRecordSelected.endTime = mRecordCopied.endTime % DAY_MILLIS + mRecordSelected.baseTime;
+        long startTime = mRecordCopied.startTime - mRecordCopied.baseTime;
+        mRecordSelected.startTime = mRecordSelected.baseTime + startTime;
+
+        long endTime = mRecordCopied.endTime - mRecordCopied.baseTime;
+        mRecordSelected.endTime = mRecordSelected.baseTime + endTime;
+
         updateHours(mRecordSelected);
     }
 
