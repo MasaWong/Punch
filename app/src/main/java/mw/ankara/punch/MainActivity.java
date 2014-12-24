@@ -85,8 +85,9 @@ public class MainActivity extends ActionBarActivity {
         updateHours(mRecordToday);
     }
 
-    private void delete(String date) {
-        PunchDb.getInstance().delete(PunchRecord.class, "time=?", new String[]{date});
+    private int delete(long baseTime) {
+        return PunchDb.getInstance().delete(PunchRecord.class, "base_time=?",
+                new String[]{String.valueOf(baseTime)});
     }
 
     private PunchRecord query(long baseTime) {
@@ -203,7 +204,17 @@ public class MainActivity extends ActionBarActivity {
     public void onMonthClick(View view) {
         saveRecord();
 
-        int hours = PunchDb.getInstance().querySum(PunchRecord.class, "hours", null);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(mCalendar.getTimeInMillis());
+
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        String firstDay = String.valueOf(calendar.getTimeInMillis());
+
+        calendar.add(Calendar.MONTH, 1);
+        String lastDay = String.valueOf(calendar.getTimeInMillis());
+
+        int hours = PunchDb.getInstance().querySum(PunchRecord.class, "hours",
+                "baseTime>=? and baseTime<?", new String[]{firstDay, lastDay});
         Toast.makeText(this, String.valueOf(hours), Toast.LENGTH_LONG).show();
     }
 

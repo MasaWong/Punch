@@ -68,8 +68,10 @@ public abstract class DbHelper extends SQLiteOpenHelper {
      * @param selectionArgs 查询条件
      * @return 返回总和
      */
-    public int querySum(Class<? extends SQLitable> clazz, String key, String[] selectionArgs) {
-        String query = "select sum(" + key + ") from " + clazz.getSimpleName();
+    public int querySum(Class<? extends SQLitable> clazz, String key, String selection,
+            String[] selectionArgs) {
+        String query = "select sum(" + key + ") from " + clazz.getSimpleName()
+                + "where " + selection;
         Cursor cursor = getReadableDatabase().rawQuery(query, selectionArgs);
 
         int sum = cursor.moveToNext() ? cursor.getInt(0) : 0;
