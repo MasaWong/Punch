@@ -82,7 +82,7 @@ public abstract class DbHelper extends SQLiteOpenHelper {
     /**
      * 查询操作
      *
-     * @param clazz         传入一个实现了SQLitable的类
+     * @param clazz         传入一个实现了{@link SQLitable}的类
      * @param selection     数据库查询where语句
      * @param selectionArgs 数据库查询where条件
      * @param groupBy       数据库分组
@@ -115,7 +115,7 @@ public abstract class DbHelper extends SQLiteOpenHelper {
     /**
      * 查询操作
      *
-     * @param clazz 传入一个实现了SQLitable的类
+     * @param clazz 传入一个实现了{@link SQLitable}的类
      * @return 返回一个ArrayList，存储着数据库查询的结果
      */
     public ArrayList<SQLitable> query(Class<? extends SQLitable> clazz) {
@@ -168,7 +168,7 @@ public abstract class DbHelper extends SQLiteOpenHelper {
      * 表的创建工作
      *
      * @param database onCreate里的参数
-     * @param table    实现了SQLitable的类的实例
+     * @param table    实现了{@link SQLitable}的类的实例
      */
     public void create(SQLiteDatabase database, SQLitable table) {
         database.execSQL(table.getSQLiteCreation());
@@ -179,8 +179,8 @@ public abstract class DbHelper extends SQLiteOpenHelper {
      * 表的创建工作
      *
      * @param database onCreate里的参数
-     * @param tables   实现了SQLitable的类的数据，直接用类来做不太好做，onCreate基本只执行一次，浪费一些效率还
-     *                 能接受，传入实现了SQLitable的类的实例
+     * @param tables   实现了{@link SQLitable}的类的数据，直接用类来做不太好做，onCreate基本只执行一次，浪费
+     *                 一些效率还能接受，传入实现了{@link SQLitable}的类的实例
      */
     public void create(SQLiteDatabase database, SQLitable[] tables) {
         for (SQLitable table : tables) {
