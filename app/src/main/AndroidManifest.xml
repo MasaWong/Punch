@@ -3,6 +3,8 @@
     package="mw.ankara.punch"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
     <application
         android:name="mw.ankara.punch.PunchApp"
         android:allowBackup="true"
@@ -19,6 +21,10 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <receiver
+            android:name="mw.ankara.punch.location.PunchHelper">
+        </receiver>
     </application>
 
 </manifest>

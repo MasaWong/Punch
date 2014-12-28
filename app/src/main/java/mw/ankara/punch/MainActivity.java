@@ -20,6 +20,7 @@ import java.util.Date;
 import mw.ankara.base.database.SQLitable;
 import mw.ankara.punch.database.PunchDb;
 import mw.ankara.punch.database.PunchRecord;
+import mw.ankara.punch.location.PunchHelper;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -216,6 +217,14 @@ public class MainActivity extends ActionBarActivity {
         int hours = PunchDb.getInstance().querySum(PunchRecord.class, "hours",
                 "baseTime>=? and baseTime<?", new String[]{firstDay, lastDay});
         Toast.makeText(this, String.valueOf(hours), Toast.LENGTH_LONG).show();
+    }
+
+    public void onAddLocationClick(View view) {
+        getFragmentManager().beginTransaction().add(R.id.main_ll_drawer, new LocationFragment())
+                .addToBackStack(null).commitAllowingStateLoss();
+    }
+
+    public void onRemoveLocationClick(View view) {
     }
 
     private void updateHours(PunchRecord record) {

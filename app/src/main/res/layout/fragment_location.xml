@@ -1,0 +1,15 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="mw.ankara.punch.LocationFragment">
+
+
+    <ImageButton
+        android:id="@+id/location_ib_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/start_location"
+        android:src="@android:drawable/ic_menu_mylocation"/>
+
+</FrameLayout>

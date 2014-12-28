@@ -32,10 +32,14 @@ public class PunchRecord extends SQLiteRecord {
     }
 
     public void punch() {
+        punch(System.currentTimeMillis());
+    }
+
+    public void punch(long time) {
         if (startTime == 0) {
-            startTime = System.currentTimeMillis();
+            startTime = time;
         } else {
-            endTime = System.currentTimeMillis();
+            endTime = time;
         }
     }
 

@@ -5,13 +5,14 @@
     <string name="copy">Copy</string>
     <string name="paste">Paste</string>
     <string name="to">to</string>
-
     <string name="main_today">今天：</string>
     <string name="main_month">本月：</string>
-
     <string name="yes">是</string>
     <string name="no">否</string>
-
     <string name="warning_modify">是否修改今天的记录？</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!--location-->
+    <string name="start_location">开始定位</string>
 
 </resources>

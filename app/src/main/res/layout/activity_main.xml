@@ -13,11 +13,15 @@
         android:orientation="vertical"
         android:padding="@dimen/cell_horizontal">
 
-        <TextView
-            android:id="@+id/main_tv_month"
+        <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="18sp"/>
+            android:onClick="onAddLocationClick"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onRemoveLocationClick"/>
 
     </LinearLayout>
 
