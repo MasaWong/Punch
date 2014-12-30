@@ -215,7 +215,7 @@ public class MainActivity extends ActionBarActivity {
         String lastDay = String.valueOf(calendar.getTimeInMillis());
 
         int hours = PunchDb.getInstance().querySum(PunchRecord.class, "hours",
-                "baseTime>=? and baseTime<?", new String[]{firstDay, lastDay});
+                "base_time>=? and base_time<?", new String[]{firstDay, lastDay});
         Toast.makeText(this, String.valueOf(hours), Toast.LENGTH_LONG).show();
     }
 
