@@ -220,8 +220,6 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void onAddLocationClick(View view) {
-        getFragmentManager().beginTransaction().add(R.id.main_ll_drawer, new LocationFragment())
-                .addToBackStack(null).commitAllowingStateLoss();
     }
 
     public void onRemoveLocationClick(View view) {
