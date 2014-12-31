@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -17,12 +16,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import mw.ankara.base.app.AnkaraActivity;
 import mw.ankara.base.database.SQLitable;
 import mw.ankara.punch.database.PunchDb;
 import mw.ankara.punch.database.PunchRecord;
-import mw.ankara.punch.location.PunchHelper;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AnkaraActivity {
 
     private Button mBPaste;
     private Button mBStart;
