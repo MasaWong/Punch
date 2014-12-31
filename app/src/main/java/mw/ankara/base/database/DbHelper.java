@@ -63,6 +63,22 @@ public abstract class DbHelper extends SQLiteOpenHelper {
     /**
      * 查询总和，只支持int型的查询
      *
+     * @param clazz 数据库类型
+     * @param key   需要查询总和的字段
+     * @return 返回总和
+     */
+    public int querySum(Class<? extends SQLitable> clazz, String key) {
+        String query = "select sum(" + key + ") from " + clazz.getSimpleName();
+        Cursor cursor = getReadableDatabase().rawQuery(query, null);
+
+        int sum = cursor.moveToNext() ? cursor.getInt(0) : 0;
+        cursor.close();
+        return sum;
+    }
+
+    /**
+     * 查询总和，只支持int型的查询
+     *
      * @param clazz         数据库类型
      * @param key           需要查询总和的字段
      * @param selectionArgs 查询条件
