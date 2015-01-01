@@ -1,7 +1,6 @@
 package mw.ankara.base.network;
 
 import android.annotation.SuppressLint;
-import android.text.TextUtils;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
