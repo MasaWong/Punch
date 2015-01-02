@@ -17,10 +17,11 @@ public class PunchDb extends DbHelper {
 
     private static PunchDb sInstance;
 
-    public static void createInstance(Context context) {
+    public static PunchDb createInstance(Context context) {
         if (sInstance == null) {
             sInstance = new PunchDb(context.getApplicationContext());
         }
+        return sInstance;
     }
 
     public static void destoryInstance() {

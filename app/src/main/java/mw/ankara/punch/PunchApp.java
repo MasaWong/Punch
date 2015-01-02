@@ -2,6 +2,7 @@ package mw.ankara.punch;
 
 import android.app.Application;
 
+import mw.ankara.base.network.WebManager;
 import mw.ankara.punch.database.PunchDb;
 
 /**
@@ -13,7 +14,8 @@ public class PunchApp extends Application {
     public void onCreate() {
         super.onCreate();
 
-        PunchDb.createInstance(getApplicationContext());
+        PunchDb.createInstance(this);
+        WebManager.createInstance(this);
     }
 
     @Override
@@ -21,5 +23,6 @@ public class PunchApp extends Application {
         super.onTerminate();
 
         PunchDb.destoryInstance();
+        WebManager.destroyInstance();
     }
 }

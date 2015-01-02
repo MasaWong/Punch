@@ -1,20 +1,50 @@
 package mw.ankara.base.app;
 
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import java.io.Serializable;
 
 /**
  * @author MasaWong
- * @date 14-8-28.
+ * @date 14-9-3.
  */
-public class AnkaraActivity extends ActionBarActivity {
+public abstract class BluesFragment extends Fragment {
+
+    private View mVFragment;
+
+    /**
+     * use {@link #initSelf(android.view.View)} instead
+     */
+    @Override
+    public final View onCreateView(LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
+        if (mVFragment == null) {
+            mVFragment = inflater.inflate(getLayoutResource(), container, false);
+            initSelf(mVFragment);
+        }
+        return mVFragment;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        ((ViewGroup) mVFragment.getParent()).removeView(mVFragment);
+    }
+
+    protected void initSelf(View view) {
+    }
 
     protected Intent buildIntent(Class nextActivity, Object... args) {
-        Intent intent = new Intent(this, nextActivity);
+        Intent intent = new Intent(getActivity(), nextActivity);
         try {
             for (int i = 0; i < args.length; i += 2) {
                 String key = (String) args[i];
@@ -48,19 +78,23 @@ public class AnkaraActivity extends ActionBarActivity {
         startActivityForResult(buildIntent(nextActivity, args), requestCode);
     }
 
+    protected abstract int getLayoutResource();
+
     protected void showBack() {
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setHomeButtonEnabled(true);
-        actionBar.setDisplayShowHomeEnabled(true);
+        ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
+    protected ActionBar getActionBar() {
+        return ((ActionBarActivity) getActivity()).getSupportActionBar();
+    }
+
     protected void showToast(int res, int duration) {
-        Toast.makeText(this, res, duration).show();
+        Toast.makeText(getActivity(), res, duration).show();
     }
 
     protected void showToast(String message, int duration) {
-        Toast.makeText(this, message, duration).show();
+        Toast.makeText(getActivity(), message, duration).show();
     }
 
     protected void showToast(int res) {

@@ -16,12 +16,13 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-import mw.ankara.base.app.AnkaraActivity;
+import mw.ankara.base.app.BluesActivity;
 import mw.ankara.base.database.SQLitable;
+import mw.ankara.punch.conversation.ConversationActivity;
 import mw.ankara.punch.database.PunchDb;
 import mw.ankara.punch.database.PunchRecord;
 
-public class MainActivity extends AnkaraActivity {
+public class MainActivity extends BluesActivity {
 
     private Button mBPaste;
     private Button mBStart;
@@ -219,9 +220,11 @@ public class MainActivity extends AnkaraActivity {
     }
 
     public void onAddLocationClick(View view) {
+        launchActivity(ConversationActivity.class);
     }
 
     public void onRemoveLocationClick(View view) {
+        launchActivity(ConversationActivity.class);
     }
 
     private void updateHours(PunchRecord record) {

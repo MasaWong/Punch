@@ -1,4 +1,4 @@
-package mw.ankara.punch.robot;
+package mw.ankara.punch.conversation;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -10,7 +10,7 @@ import mw.ankara.base.database.SQLiteRecord;
  * @author MasaWong
  * @date 14/12/31.
  */
-public class Conversation extends SQLiteRecord{
+public class Conversation extends SQLiteRecord {
 
     public static final int ROBOT = 0;
     public static final int ME = 1;
@@ -31,4 +31,17 @@ public class Conversation extends SQLiteRecord{
 
     @Map(key = "content")
     public String content;
+
+    public Conversation() {
+    }
+
+    public Conversation(int role, long time, String content) {
+        this.role = role;
+        this.time = time;
+        this.date = translateTimeToDate(time);
+        this.content = content;
+    }
+
+    public void save() {
+    }
 }

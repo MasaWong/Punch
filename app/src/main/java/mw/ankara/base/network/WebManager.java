@@ -1,29 +1,31 @@
 package mw.ankara.base.network;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.support.v4.util.LruCache;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 
+import mw.ankara.base.cache.BitmapCache;
+
 /**
- * {@link #mRequestQueue} request type :
+ * 警告: 需要权限android.permission.INTERNET
+ * <p/>
+ * {@link #mRequestQueue} 请求有4种类型 :
  * {@link com.android.volley.toolbox.JsonObjectRequest}
  * {@link com.android.volley.toolbox.JsonArrayRequest}
  * {@link com.android.volley.toolbox.StringRequest}
  * {@link com.android.volley.toolbox.ImageRequest}
  * <p/>
- * {@link #mImageLoader} cache image :
+ * {@link #mImageLoader} 用于缓存Bitmap
  *
  * @author MasaWong
  * @date 14-7-30.
  */
 public class WebManager {
 
-    private static WebManager sScheduler;
+    private static WebManager sInstance;
 
     private RequestQueue mRequestQueue;
 
@@ -31,31 +33,25 @@ public class WebManager {
 
     private WebManager(Context context) {
         mRequestQueue = Volley.newRequestQueue(context);
+        mRequestQueue.start();
 
-        mImageLoader = new ImageLoader(
-                mRequestQueue,
-                new ImageLoader.ImageCache() {
-                    private final LruCache<String, Bitmap>
-                            cache = new LruCache<String, Bitmap>(20);
-
-                    @Override
-                    public Bitmap getBitmap(String url) {
-                        return cache.get(url);
-                    }
-
-                    @Override
-                    public void putBitmap(String url, Bitmap bitmap) {
-                        cache.put(url, bitmap);
-                    }
-                });
+        mImageLoader = new ImageLoader(mRequestQueue, new BitmapCache(context));
     }
 
     public static WebManager getInstance() {
-        return sScheduler;
+        return sInstance;
     }
 
-    public static void init(Context context) {
-        sScheduler = new WebManager(context);
+    public static WebManager createInstance(Context context) {
+        if (sInstance == null) {
+            sInstance = new WebManager(context.getApplicationContext());
+        }
+        return sInstance;
+    }
+
+    public static void destroyInstance() {
+        sInstance.mRequestQueue.stop();
+        sInstance = null;
     }
 
     public void sendRequest(Request request) {
