@@ -1,5 +1,6 @@
 package mw.ankara.punch.conversation;
 
+import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.TextView;
 
@@ -26,11 +27,13 @@ public class ConversationHolder {
             mTvMe.setVisibility(View.GONE);
 
             mTvRobot.setText(conversation.content);
+            mTvRobot.setMovementMethod(LinkMovementMethod.getInstance());
         } else {
             mTvMe.setVisibility(View.VISIBLE);
             mTvRobot.setVisibility(View.GONE);
 
             mTvMe.setText(conversation.content);
+            mTvMe.setMovementMethod(LinkMovementMethod.getInstance());
         }
     }
 }

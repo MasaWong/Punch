@@ -30,16 +30,16 @@ public class Conversation extends SQLiteRecord {
     public String date;
 
     @Map(key = "content")
-    public String content;
+    public CharSequence content;
 
     public Conversation() {
     }
 
-    public Conversation(int role, String content) {
+    public Conversation(int role, CharSequence content) {
         this(role, System.currentTimeMillis(), content);
     }
 
-    public Conversation(int role, long time, String content) {
+    public Conversation(int role, long time, CharSequence content) {
         this.role = role;
         this.time = time;
         this.date = translateTimeToDate(time);

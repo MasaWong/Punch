@@ -1,6 +1,9 @@
 package mw.ankara.punch.conversation.response;
 
-import android.text.TextUtils;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.URLSpan;
+import android.text.style.UnderlineSpan;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,9 +22,9 @@ public class UrlResponse extends TextResponse {
         super(jsonObject);
 
         try {
-            url = jsonObject == null ? "" : jsonObject.getString("url");
+            url = jsonObject.getString("url");
         } catch (JSONException e) {
-            url = "";
+            e.printStackTrace();
         }
     }
 
@@ -32,8 +35,17 @@ public class UrlResponse extends TextResponse {
 
     @Override
     public Conversation[] getConversations() {
-        String content = TextUtils.isEmpty(url) ? text : text + "\n" + url;
-        Conversation conversation = new Conversation(Conversation.ROBOT, time, content);
+        String content = text + "\n" + url;
+
+        int urlStart = text.length() + 1;
+        int urlEnd = content.length();
+        SpannableString spannableContent = new SpannableString(content);
+        spannableContent.setSpan(new URLSpan(url), urlStart, urlEnd,
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableContent.setSpan(new UnderlineSpan(), urlStart, urlEnd,
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        Conversation conversation = new Conversation(Conversation.ROBOT, time, spannableContent);
         return new Conversation[]{conversation};
     }
 }

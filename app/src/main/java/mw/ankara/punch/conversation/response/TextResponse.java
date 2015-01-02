@@ -16,9 +16,9 @@ public class TextResponse extends RobotResponse {
     public TextResponse(JSONObject jsonObject) {
         super();
         try {
-            text = jsonObject == null ? ERROR_MESSAGE : jsonObject.getString("text");
+            text = jsonObject.getString("text");
         } catch (JSONException e) {
-            text = ERROR_MESSAGE;
+            e.printStackTrace();
         }
     }
 

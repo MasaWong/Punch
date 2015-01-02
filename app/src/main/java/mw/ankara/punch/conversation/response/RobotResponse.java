@@ -11,8 +11,6 @@ import mw.ankara.punch.conversation.Conversation;
  */
 public abstract class RobotResponse {
 
-    public static final String ERROR_MESSAGE = "Ankara听不懂";
-
     public static RobotResponse getResponse(JSONObject jsonObject) {
         try {
             int code = jsonObject.getInt("code");
@@ -22,10 +20,10 @@ public abstract class RobotResponse {
                 case 200000:
                     return new UrlResponse(jsonObject);
                 default:
-                    return new TextResponse(null);
+                    return new ErrorResponse(jsonObject);
             }
         } catch (JSONException e) {
-            return new TextResponse(null);
+            return new ErrorResponse(jsonObject);
         }
     }
 

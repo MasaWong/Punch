@@ -1,6 +1,7 @@
 package mw.ankara.base.network;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -56,6 +57,7 @@ public class WebManager {
 
     public void sendRequest(Request request) {
         mRequestQueue.add(request);
+        Log.e("url", request.getUrl());
     }
 
     public void cancelRequest(Object tag) {
