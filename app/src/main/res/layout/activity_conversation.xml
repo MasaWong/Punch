@@ -6,6 +6,7 @@
     tools:context="mw.ankara.punch.conversation.ConversationActivity">
 
     <ListView
+        android:id="@+id/conversation_lv_history"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"/>

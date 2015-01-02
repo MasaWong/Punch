@@ -35,6 +35,10 @@ public class Conversation extends SQLiteRecord {
     public Conversation() {
     }
 
+    public Conversation(int role, String content) {
+        this(role, System.currentTimeMillis(), content);
+    }
+
     public Conversation(int role, long time, String content) {
         this.role = role;
         this.time = time;
