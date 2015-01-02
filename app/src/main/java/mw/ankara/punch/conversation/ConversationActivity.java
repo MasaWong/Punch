@@ -13,6 +13,7 @@ public class ConversationActivity extends BluesActivity {
 
     private EditText mEtContent;
 
+    private ListView mLvHistory;
     private ConversationAdapter mHistory;
 
     private ConversationManager mManager;
@@ -30,9 +31,9 @@ public class ConversationActivity extends BluesActivity {
     }
 
     private void initHistory() {
-        ListView history = (ListView) findViewById(R.id.conversation_lv_history);
+        mLvHistory = (ListView) findViewById(R.id.conversation_lv_history);
         mHistory = new ConversationAdapter(this);
-        history.setAdapter(mHistory);
+        mLvHistory.setAdapter(mHistory);
     }
 
     private void initConversation() {
@@ -46,6 +47,7 @@ public class ConversationActivity extends BluesActivity {
                 } else {
                     mHistory.addConversations(conversations);
                     mHistory.notifyDataSetChanged();
+                    mLvHistory.smoothScrollToPosition(Integer.MAX_VALUE);
                 }
             }
         };
@@ -60,6 +62,7 @@ public class ConversationActivity extends BluesActivity {
             Conversation myVoice = new Conversation(Conversation.ME, content);
             mHistory.addConversation(myVoice);
             mHistory.notifyDataSetChanged();
+            mLvHistory.smoothScrollToPosition(Integer.MAX_VALUE);
 
             mEtContent.setText("");
         }
