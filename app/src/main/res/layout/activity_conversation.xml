@@ -9,7 +9,9 @@
         android:id="@+id/conversation_lv_history"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        android:divider="@null"
+        android:listSelector="@null"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,8 +22,8 @@
         <EditText
             android:id="@+id/conversation_et_content"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:inputType="text"/>
 
         <Button
