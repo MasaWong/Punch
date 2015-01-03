@@ -5,6 +5,7 @@ import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 
 import mw.ankara.base.database.DbHelper;
+import mw.ankara.punch.conversation.Conversation;
 
 /**
  * @author MasaWong
@@ -13,7 +14,7 @@ import mw.ankara.base.database.DbHelper;
 public class PunchDb extends DbHelper {
 
     private static final String DB_NAME = "mw.ankara.punch.db";
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 2;
 
     private static PunchDb sInstance;
 
@@ -42,10 +43,22 @@ public class PunchDb extends DbHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        create(db, new PunchRecord());
+        runCreationV1(db);
+        runCreationV2(db);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        if (oldVersion == 1) {
+            runCreationV2(db);
+        }
+    }
+
+    protected void runCreationV1(SQLiteDatabase db) {
+        create(db, new PunchRecord());
+    }
+
+    protected void runCreationV2(SQLiteDatabase db) {
+        create(db, new Conversation());
     }
 }

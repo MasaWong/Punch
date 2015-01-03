@@ -29,8 +29,15 @@ public class ConversationAdapter extends BaseAdapter {
         mConversations.add(conversation);
     }
 
-    public void addConversations(Conversation[] conversations) {
-        Collections.addAll(mConversations, conversations);
+    public void addAndSaveConversation(Conversation conversation) {
+        mConversations.add(conversation);
+        conversation.save();
+    }
+
+    public void addAndSaveConversations(Conversation[] conversations) {
+        for (Conversation conversation : conversations) {
+            addAndSaveConversation(conversation);
+        }
     }
 
     @Override

@@ -6,8 +6,12 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import java.util.ArrayList;
+
 import mw.ankara.base.app.BluesActivity;
+import mw.ankara.base.database.SQLitable;
 import mw.ankara.punch.R;
+import mw.ankara.punch.database.PunchDb;
 
 public class ConversationActivity extends BluesActivity {
 
@@ -33,6 +37,12 @@ public class ConversationActivity extends BluesActivity {
     private void initHistory() {
         mLvHistory = (ListView) findViewById(R.id.conversation_lv_history);
         mHistory = new ConversationAdapter(this);
+
+        ArrayList<SQLitable> conversations = PunchDb.getInstance().query(Conversation.class);
+        for (SQLitable conversation : conversations) {
+            mHistory.addConversation((Conversation) conversation);
+        }
+
         mLvHistory.setAdapter(mHistory);
     }
 
@@ -45,7 +55,7 @@ public class ConversationActivity extends BluesActivity {
                     // TODO: do sth.
                     showToast("");
                 } else {
-                    mHistory.addConversations(conversations);
+                    mHistory.addAndSaveConversations(conversations);
                     mHistory.notifyDataSetChanged();
                     mLvHistory.smoothScrollToPosition(Integer.MAX_VALUE);
                 }
@@ -60,7 +70,7 @@ public class ConversationActivity extends BluesActivity {
             mManager.talk(content, mCallback);
 
             Conversation myVoice = new Conversation(Conversation.ME, content);
-            mHistory.addConversation(myVoice);
+            mHistory.addAndSaveConversation(myVoice);
             mHistory.notifyDataSetChanged();
             mLvHistory.smoothScrollToPosition(Integer.MAX_VALUE);
 
